@@ -56,10 +56,10 @@ void main(){
 	//inizializzazione posizione bunker
 	srand(time(NULL));
 	while(counter < sovietBunkerNumber){
-		lineSovietBunker[counter] = minSovietLenght + (rand() % sovietLenght);
-		columnSovietBunker[counter] = minSovietHight + (rand() % sovietHight);
+		columnSovietBunker[counter] = minSovietLenght + (rand() % sovietLenght);
+		lineSovietBunker[counter] = minSovietHight + (rand() % sovietHight);
 		if(faction){
-			worldASCII[selectASCII(worldASCIILenght, columnSovietBunker[counter], lineSovietBunker[counter])] = bunkerChar;
+			worldASCII[selectASCII(worldASCIILenght, lineSovietBunker[counter], columnSovietBunker[counter])] = bunkerChar;
 		}
 		counter++;
 	}

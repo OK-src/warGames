@@ -49,8 +49,8 @@ int estLenght = 36;
 int northLenght = 12;
 int southLenght = 11;
 
-int maxSovietHight = 4;
-int minSovietHight = 13;
+int maxSovietHight = 13;
+int minSovietHight = 4;
 int maxSovietLenght = 68;
 int minSovietLenght = 51;
 /*
