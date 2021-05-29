@@ -78,11 +78,11 @@ void main(){
 		}
 		counter++;
 	}
-	printf("\nUNITED-STATES: %d - SOVIET-UNION: %d\n", americanBunkerNumber, sovietBunkerNumber);
 	
 	//lancio dei missili nucleari
 	while(true){
 		printASCII(worldASCIILenght, worldASCII);
+		printf("UNITED-STATES: %d - SOVIET-UNION: %d\n", americanBunkerNumber, sovietBunkerNumber);
 		printf("longitude(+N, -S): ");
 		scanf("%d", &launchLongitude);
 		printf("latitude(+W, -E): ");
@@ -97,6 +97,86 @@ void main(){
 		} else {
 			launchLatitude = leftBorderLenght + (int)(rapportEst * -(launchLatitude) + 0.5) + westLenght;
 		}
+		
+		//controllo se hanno beccato qualcosa
+		counter = 0;
+		while(counter < americanBunkerNumber){
+			if(columnAmericanBunker[counter] == launchLatitude){
+				if(lineAmericanBunker[counter] == launchLongitude){
+					americanBunkerNumber--;
+					columnAmericanBunker[counter] = 0xFFFF;
+					lineAmericanBunker[counter] = 0xFFFF;
+				}
+			}
+			counter++;
+		}
+		counter = 0;
+		while(counter < sovietBunkerNumber){
+			if(columnSovietBunker[counter] == launchLatitude){
+				if(lineSovietBunker[counter] == launchLongitude){
+					sovietBunkerNumber--;
+					columnSovietBunker[counter] = 0xFFFF;
+					lineSovietBunker[counter] = 0xFFFF;
+				}
+			}
+			counter++;
+		}
+		
+		//metto un carattere che rappresenta il cratere della bomba
 		worldASCII[selectASCII(worldASCIILenght, launchLongitude, launchLatitude)] = bombChar;
+		
+		//turno del robot
+		printf("ENEMY SHIFT\n");
+		if(!faction){
+			launchLatitude = minAmericanLenght + (rand() % americanLenght);
+			launchLongitude =  minAmericanHight + (rand() % americanHight);
+			counter = 0;
+			while(counter < americanBunkerNumber){
+				if(columnAmericanBunker[counter] == launchLatitude){
+					if(lineAmericanBunker[counter] == launchLongitude){
+						americanBunkerNumber--;
+						columnAmericanBunker[counter] = 0xFFFF;
+						lineAmericanBunker[counter] = 0xFFFF;
+					}
+				}
+				counter++;
+			}
+		} else {
+			launchLatitude = minSovietLenght + (rand() % sovietLenght);
+			launchLongitude = minSovietHight + (rand() % sovietHight);
+			counter = 0;
+			while(counter < sovietBunkerNumber){
+				if(columnSovietBunker[counter] == launchLatitude){
+					if(lineSovietBunker[counter] == launchLongitude){
+						sovietBunkerNumber--;
+						columnSovietBunker[counter] = 0xFFFF;
+						lineSovietBunker[counter] = 0xFFFF;
+					}
+				}
+				counter++;
+			}
+		}
+		worldASCII[selectASCII(worldASCIILenght, launchLongitude, launchLatitude)] = bombChar;
+		if(sovietBunkerNumber == 0){
+			if(faction){
+				ASCIIbomb();
+				printf("LOOSER!\n");
+				exit(0);
+			} else {
+				ASCIIbomb();
+				printf("WINNER!\n");
+				exit(0);
+			}
+		}else if(americanBunkerNumber == 0){
+			if(faction){
+				ASCIIbomb();
+				printf("WINNER!\n");
+				exit(0);
+			} else {
+				ASCIIbomb();
+				printf("LOOSER!\n");
+				exit(0);
+			}
+		}
 	}
 }
