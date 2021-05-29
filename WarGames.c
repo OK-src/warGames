@@ -33,8 +33,14 @@ void main(){
 	const int sovietLenght = maxSovietLenght - minSovietLenght;
 	const int sovietHight = maxSovietHight - minSovietHight;
 	
+	const int americanLenght = maxAmericanLenght - minAmericanLenght;
+	const int americanHight = maxAmericanHight - minAmericanHight;
+	
 	int lineSovietBunker[sovietBunkerNumber - 1];
 	int columnSovietBunker[sovietBunkerNumber - 1];
+	
+	int lineAmericanBunker[sovietBunkerNumber - 1];
+	int columnAmericanBunker[sovietBunkerNumber - 1];
 	/*il resto delle variabili sono prelevate da config.c*/
 	
 	//scelta della fazione
@@ -63,6 +69,16 @@ void main(){
 		}
 		counter++;
 	}
+	counter = 0;
+	while(counter < americanBunkerNumber){
+		columnAmericanBunker[counter] = minAmericanLenght + (rand() % americanLenght);
+		lineAmericanBunker[counter] = minAmericanHight + (rand() % americanHight);
+		if(!faction){
+			worldASCII[selectASCII(worldASCIILenght, lineAmericanBunker[counter], columnAmericanBunker[counter])] = bunkerChar;
+		}
+		counter++;
+	}
+	printf("\nUNITED-STATES: %d - SOVIET-UNION: %d\n", americanBunkerNumber, sovietBunkerNumber);
 	
 	//lancio dei missili nucleari
 	while(true){

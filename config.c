@@ -51,8 +51,13 @@ int southLenght = 11;
 
 int maxSovietHight = 13;
 int minSovietHight = 4;
-int maxSovietLenght = 68;
-int minSovietLenght = 51;
+int maxSovietLenght = 73;
+int minSovietLenght = 49;
+
+int maxAmericanHight = 12;
+int minAmericanHight = 3;
+int maxAmericanLenght = 30;
+int minAmericanLenght = 6;
 /*
    180   150W  120W  90W   60W   30W   000   30E   60E   90E   120E  150E  180
     |     |     |     |     |     |     |     |     |     |     |     |     |
