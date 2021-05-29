@@ -11,11 +11,14 @@ a8"     "8a 88 ,a8"
 
 #include <stdio.h>
 #include <stdbool.h>
+#include <stdlib.h>
+#include <time.h>
 #include "ASCIIlibrary.c"
 #include "config.c"
 
 void main(){
 	//variabili
+	int counter = 0;
 	char input[50];
 	bool faction;
 	bool control = true; //variabile booleana usata per memorizzare l'esito di un'azione
@@ -26,6 +29,12 @@ void main(){
 	const double rapportSouth = (double)southLenght / 90;
 	const double rapportWest = (double)westLenght / 180;
 	const double rapportEst = (double)estLenght / 180;
+	
+	const int sovietLenght = maxSovietLenght - minSovietLenght;
+	const int sovietHight = maxSovietHight - minSovietHight;
+	
+	int lineSovietBunker[sovietBunkerNumber - 1];
+	int columnSovietBunker[sovietBunkerNumber - 1];
 	/*il resto delle variabili sono prelevate da config.c*/
 	
 	//scelta della fazione
@@ -44,7 +53,18 @@ void main(){
 		}
 	}
 	
-	//
+	//inizializzazione posizione bunker
+	srand(time(NULL));
+	while(counter < sovietBunkerNumber){
+		lineSovietBunker[counter] = minSovietLenght + (rand() % sovietLenght);
+		columnSovietBunker[counter] = minSovietHight + (rand() % sovietHight);
+		if(faction){
+			worldASCII[selectASCII(worldASCIILenght, columnSovietBunker[counter], lineSovietBunker[counter])] = bunkerChar;
+		}
+		counter++;
+	}
+	
+	//lancio dei missili nucleari
 	while(true){
 		printASCII(worldASCIILenght, worldASCII);
 		printf("longitude(+N, -S): ");

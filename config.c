@@ -51,8 +51,8 @@ int southLenght = 11;
 
 int maxSovietHight = 4;
 int minSovietHight = 13;
-int maxSovietLenght = 51;
-int 
+int maxSovietLenght = 68;
+int minSovietLenght = 51;
 /*
    180   150W  120W  90W   60W   30W   000   30E   60E   90E   120E  150E  180
     |     |     |     |     |     |     |     |     |     |     |     |     |
@@ -88,4 +88,8 @@ int
 * https://ascii.co.uk/art/world
 */
 
-char bombChar = '@';
+char bombChar = '#';
+char bunkerChar = '@';
+
+int sovietBunkerNumber = 10;
+int americanBunkerNumber = 10;
