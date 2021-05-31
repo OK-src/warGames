@@ -13,7 +13,7 @@ a8"     "8a 88 ,a8"
 #include <stdbool.h>
 #include <stdlib.h>
 #include <time.h>
-#include "ASCIIlibrary.c"
+#include <string.h>
 #include "config.c"
 
 void main(){
@@ -44,7 +44,7 @@ void main(){
 	/*il resto delle variabili sono prelevate da config.c*/
 	
 	//scelta della fazione
-	printASCII(factionASCIILenght, factionASCII);
+	factionASCII();
 	while(control == true){
 		printf("Select a faction: ");
 		scanf("%s", &input);
@@ -65,7 +65,7 @@ void main(){
 		columnSovietBunker[counter] = minSovietLenght + (rand() % sovietLenght);
 		lineSovietBunker[counter] = minSovietHight + (rand() % sovietHight);
 		if(faction){
-			worldASCII[selectASCII(worldASCIILenght, lineSovietBunker[counter], columnSovietBunker[counter])] = bunkerChar;
+			worldASCII[lineSovietBunker[counter]][columnSovietBunker[counter]] = bunkerChar;
 		}
 		counter++;
 	}
@@ -74,14 +74,19 @@ void main(){
 		columnAmericanBunker[counter] = minAmericanLenght + (rand() % americanLenght);
 		lineAmericanBunker[counter] = minAmericanHight + (rand() % americanHight);
 		if(!faction){
-			worldASCII[selectASCII(worldASCIILenght, lineAmericanBunker[counter], columnAmericanBunker[counter])] = bunkerChar;
+			worldASCII[lineAmericanBunker[counter]][columnAmericanBunker[counter]] = bunkerChar;
 		}
 		counter++;
 	}
 	
 	//lancio dei missili nucleari
 	while(true){
-		printASCII(worldASCIILenght, worldASCII);
+		//stampo la mappa
+		counter = 0;
+		while(counter < worldASCIIHight){
+			printf("%s", &worldASCII[counter]);
+			counter++;
+		}
 		printf("UNITED-STATES: %d - SOVIET-UNION: %d\n", americanBunkerNumber, sovietBunkerNumber);
 		printf("longitude(+N, -S): ");
 		scanf("%d", &launchLongitude);
@@ -123,7 +128,7 @@ void main(){
 		}
 		
 		//metto un carattere che rappresenta il cratere della bomba
-		worldASCII[selectASCII(worldASCIILenght, launchLongitude, launchLatitude)] = bombChar;
+		worldASCII[launchLongitude][launchLatitude] = bombChar;
 		
 		//turno del robot
 		printf("ENEMY SHIFT\n");
@@ -156,7 +161,7 @@ void main(){
 				counter++;
 			}
 		}
-		worldASCII[selectASCII(worldASCIILenght, launchLongitude, launchLatitude)] = bombChar;
+		worldASCII[launchLongitude][launchLatitude] = bombChar;
 		if(sovietBunkerNumber == 0){
 			if(faction){
 				ASCIIbomb();
