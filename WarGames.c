@@ -18,34 +18,35 @@ a8"     "8a 88 ,a8"
 
 void main(){
 	//variabili
-	int counter = 0;
-	char input[50];
-	bool faction;
+	int counter = 0; //contatore di cicli
+	char input[50]; //variabile per chiedere input
+	bool faction; //variabile per memorizzare la fazione
 	bool control = true; //variabile booleana usata per memorizzare l'esito di un'azione
 	
-	int launchLongitude;
-	int launchLatitude;
-	const double rapportNorth = (double)northLenght / 90;
-	const double rapportSouth = (double)southLenght / 90;
-	const double rapportWest = (double)westLenght / 180;
-	const double rapportEst = (double)estLenght / 180;
+	int launchLongitude; //longitudine verso cui sarà lanciato il missile
+	int launchLatitude; //latitudine verso cui sarà lanciato il missile
+	const double rapportNorth = (double)northLenght / 90; //un grado Nord in proporzione alla mappa
+	const double rapportSouth = (double)southLenght / 90; //un grado Sud in proporzione alla mappa
+	const double rapportWest = (double)westLenght / 180; //un grado Ovest in proporzione alla mappa
+	const double rapportEst = (double)estLenght / 180; //un grado Est in proporzione alla mappa
 	
-	const int sovietLenght = maxSovietLenght - minSovietLenght;
-	const int sovietHight = maxSovietHight - minSovietHight;
+	const int sovietLenght = maxSovietLenght - minSovietLenght; //lunghezza regione sovietica
+	const int sovietHight = maxSovietHight - minSovietHight; //altezza regione sovietica
 	
-	const int americanLenght = maxAmericanLenght - minAmericanLenght;
-	const int americanHight = maxAmericanHight - minAmericanHight;
+	const int americanLenght = maxAmericanLenght - minAmericanLenght; //lunghezza regione americana
+	const int americanHight = maxAmericanHight - minAmericanHight; //altezza regione americana
 	
-	int lineSovietBunker[sovietBunkerNumber - 1];
-	int columnSovietBunker[sovietBunkerNumber - 1];
+	int lineSovietBunker[sovietBunkerNumber - 1]; //array per memorizzare le linee in cui sono posizionati i bunker sovietici
+	int columnSovietBunker[sovietBunkerNumber - 1]; //array per memorizzare le colonne in cui sono posizionati i bunker sovietici
 	
-	int lineAmericanBunker[sovietBunkerNumber - 1];
-	int columnAmericanBunker[sovietBunkerNumber - 1];
+	int lineAmericanBunker[americanBunkerNumber - 1]; //array per memorizzare le linee in cui sono posizionati i bunker americani
+	int columnAmericanBunker[americanBunkerNumber - 1]; //array per memorizzare le colonne in cui sono posizionati i bunker americani
 	/*il resto delle variabili sono prelevate da config.c*/
 	
 	//scelta della fazione
-	factionASCII();
+	factionASCII(); //printaggio immagine fazioni
 	while(control == true){
+		//inserimento input
 		printf("Select a faction: ");
 		scanf("%s", &input);
 		if(strncmp("UNITED-STATES", input, 13) == 0){
@@ -59,8 +60,8 @@ void main(){
 		}
 	}
 	
-	//inizializzazione posizione bunker
-	srand(time(NULL));
+	//assegnazione posizione bunker
+	srand(time(NULL)); //inizializzazione di rand()
 	while(counter < sovietBunkerNumber){
 		columnSovietBunker[counter] = minSovietLenght + (rand() % sovietLenght);
 		lineSovietBunker[counter] = minSovietHight + (rand() % sovietHight);
@@ -81,12 +82,7 @@ void main(){
 	
 	//lancio dei missili nucleari
 	while(true){
-		//stampo la mappa
-		counter = 0;
-		while(counter < worldASCIIHight){
-			printf("%s", &worldASCII[counter]);
-			counter++;
-		}
+		printWorld();
 		printf("UNITED-STATES: %d - SOVIET-UNION: %d\n", americanBunkerNumber, sovietBunkerNumber);
 		printf("longitude(+N, -S): ");
 		scanf("%d", &launchLongitude);
@@ -183,5 +179,14 @@ void main(){
 				exit(0);
 			}
 		}
+		printWorld();
+	}
+}
+
+void printWorld(){
+	int counter = 0;
+	while(counter <= worldASCIIHight){
+		printf("%s", &worldASCII[counter]);
+		counter++;
 	}
 }
