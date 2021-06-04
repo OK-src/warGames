@@ -13,9 +13,10 @@ a8"     "8a 88 ,a8"
 #include <stdbool.h>
 #include <stdlib.h>
 #include <time.h>
+#include <stdlib.h>
 #include <string.h>
 #include "config.c"
-
+;
 void main(){
 	//variabili
 	int counter = 0; //contatore di cicli
@@ -60,34 +61,42 @@ void main(){
 		}
 	}
 	
+	//inizializzazione di rand()
+	srand(time(NULL));
+	
 	//assegnazione posizione bunker
-	srand(time(NULL)); //inizializzazione di rand()
-	while(counter < sovietBunkerNumber){
-		columnSovietBunker[counter] = minSovietLenght + (rand() % sovietLenght);
-		lineSovietBunker[counter] = minSovietHight + (rand() % sovietHight);
-		if(faction){
+	while(counter < sovietBunkerNumber){ //ciclo di posizionamento bunker sovietici
+		columnSovietBunker[counter] = minSovietLenght + (rand() % sovietLenght); //numero colonna
+		lineSovietBunker[counter] = minSovietHight + (rand() % sovietHight); //numero riga
+		if(faction){ //evidenzio i bunker se sono della mia fazione
 			worldASCII[lineSovietBunker[counter]][columnSovietBunker[counter]] = bunkerChar;
 		}
 		counter++;
 	}
 	counter = 0;
-	while(counter < americanBunkerNumber){
-		columnAmericanBunker[counter] = minAmericanLenght + (rand() % americanLenght);
-		lineAmericanBunker[counter] = minAmericanHight + (rand() % americanHight);
-		if(!faction){
+	while(counter < americanBunkerNumber){ //ciclo di posizionamento bunker americani
+		columnAmericanBunker[counter] = minAmericanLenght + (rand() % americanLenght); //numero colonna
+		lineAmericanBunker[counter] = minAmericanHight + (rand() % americanHight); //numero riga
+		if(!faction){ //evidenzio i bunker se sono della mia fazione
 			worldASCII[lineAmericanBunker[counter]][columnAmericanBunker[counter]] = bunkerChar;
 		}
 		counter++;
 	}
 	
 	//lancio dei missili nucleari
+	printWorld();
 	while(true){
-		printWorld();
+		//turno del giocatore
+		printf("YOUR SHIFT\n");
 		printf("UNITED-STATES: %d - SOVIET-UNION: %d\n", americanBunkerNumber, sovietBunkerNumber);
+		//input longitudine di lancio
 		printf("longitude(+N, -S): ");
 		scanf("%d", &launchLongitude);
+		//input latitudine di lancio
 		printf("latitude(+W, -E): ");
 		scanf("%d", &launchLatitude);
+		
+		//conversione delle coordinate in numeri di righe e colonne
 		if(launchLongitude >= 0){
 			launchLongitude = topBorderLenght + (northLenght - (int)(rapportNorth * launchLongitude + 0.5)) - 1;
 		} else {
@@ -97,6 +106,12 @@ void main(){
 			launchLatitude = leftBorderLenght + (westLenght - (int)(rapportWest * launchLatitude + 0.5));
 		} else {
 			launchLatitude = leftBorderLenght + (int)(rapportEst * -(launchLatitude) + 0.5) + westLenght;
+		}
+		
+		if(!faction){
+			printMissile(americanBunkerNumber, lineAmericanBunker, columnAmericanBunker, launchLatitude, launchLongitude, americanMissileChar);
+		} else {
+			printMissile(sovietBunkerNumber, lineSovietBunker, columnSovietBunker, launchLatitude, launchLongitude, sovietMissileChar);
 		}
 		
 		//controllo se hanno beccato qualcosa
@@ -124,6 +139,7 @@ void main(){
 		}
 		
 		//metto un carattere che rappresenta il cratere della bomba
+		
 		worldASCII[launchLongitude][launchLatitude] = bombChar;
 		
 		//turno del robot
@@ -158,6 +174,13 @@ void main(){
 			}
 		}
 		worldASCII[launchLongitude][launchLatitude] = bombChar;
+		if(faction){
+			printMissile(americanBunkerNumber, lineAmericanBunker, columnAmericanBunker, launchLatitude, launchLongitude, americanMissileChar);
+		} else {
+			printMissile(sovietBunkerNumber, lineSovietBunker, columnSovietBunker, launchLatitude, launchLongitude, sovietMissileChar);
+		}
+		
+		//verifico se qualcuno ha vinto o perso
 		if(sovietBunkerNumber == 0){
 			if(faction){
 				ASCIIbomb();
@@ -179,7 +202,6 @@ void main(){
 				exit(0);
 			}
 		}
-		printWorld();
 	}
 }
 
@@ -188,5 +210,57 @@ void printWorld(){
 	while(counter <= worldASCIIHight){
 		printf("%s", &worldASCII[counter]);
 		counter++;
+	}
+}
+
+void printMissile(int bunkerNumber, int lineBunker[], int columnBunker[], int launchLatitude, int launchLongitude, char missileChar){
+	double direction;
+	int columnDifference;
+	int lineDifference;
+	int lineCounter = 0;
+	int columnCounter = 0;
+	char conservChar;
+	int bunker = rand() % (bunkerNumber - 1); //prelievo di un bunker a caso
+	
+	//controllo che non sia distrutto
+	while(lineBunker[bunker] == 0xFFFF){
+		bunker = rand() % (bunkerNumber - 1);
+	}
+	
+	//calcolo dello spostamento necessario
+	columnDifference = launchLatitude - columnBunker[bunker];
+	lineDifference = launchLongitude - lineBunker[bunker];
+	
+	//se la distanza che bisogna percorrere sulle ascisse è maggiore di quella delle ordinate allora aumento gradualmente le ascisse, se no faccio il contrario
+	if(abs(columnDifference) > abs(lineDifference)){
+		direction = (double)lineDifference / columnDifference; //valore per cui moltiplicare la linea relativa alla colonna
+		while(columnCounter != columnDifference){
+			lineCounter = lineBunker[bunker] + (int)(direction * columnCounter + 0.5);
+			conservChar = worldASCII[lineCounter][columnCounter + columnBunker[bunker]];
+			worldASCII[lineCounter][columnCounter + columnBunker[bunker]] = missileChar;
+			printWorld();
+			worldASCII[lineCounter][columnCounter + columnBunker[bunker]] = conservChar;
+			if(columnDifference < 0){
+				columnCounter--;
+			}else{
+				columnCounter++;
+			}
+			nanosleep((const struct timespec[]){{0, timeSleep}}, NULL);
+		}
+	} else {
+		direction = (double)columnDifference / lineDifference;
+		while(lineCounter != lineDifference){
+			columnCounter = columnBunker[bunker] + (int)(direction * lineCounter + 0.5);
+			conservChar = worldASCII[lineCounter + lineBunker[bunker]][columnCounter];
+			worldASCII[lineCounter + lineBunker[bunker]][columnCounter] = missileChar;
+			printWorld();
+			worldASCII[lineCounter + lineBunker[bunker]][columnCounter] = conservChar;
+			if(lineDifference < 0){
+				lineCounter--;
+			}else{
+				lineCounter++;
+			}
+			nanosleep((const struct timespec[]){{0, timeSleep}}, NULL);
+		}
 	}
 }

@@ -67,8 +67,8 @@ void ASCIIbomb(){
 	printf("                        (` ^'\"`-' \")\n");
 }
 
-int worldASCIIHight = 29;
-char worldASCII[28][83] = {
+int worldASCIIHight = 30;
+char worldASCII[29][83] = {
 	{"   180   150W  120W  90W   60W   30W   000   30E   60E   90E   120E  150E  180   \n"}, //0
 	{"    |     |     |     |     |     |     |     |     |     |     |     |     |    \n"}, //1
 	{"90N-+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-----+-90N\n"}, //2
@@ -155,6 +155,10 @@ int minAmericanLenght = 6;
 
 char bombChar = '#';
 char bunkerChar = '@';
+char sovietMissileChar = '<';
+char americanMissileChar = '>';
 
 int sovietBunkerNumber = 10;
 int americanBunkerNumber = 10;
+
+int timeSleep = 200000000L //nanoseconds
