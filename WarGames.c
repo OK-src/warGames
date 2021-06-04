@@ -141,6 +141,7 @@ void main(){
 		//metto un carattere che rappresenta il cratere della bomba
 		
 		worldASCII[launchLongitude][launchLatitude] = bombChar;
+		printWorld();
 		
 		//turno del robot
 		printf("ENEMY SHIFT\n");
@@ -173,12 +174,13 @@ void main(){
 				counter++;
 			}
 		}
-		worldASCII[launchLongitude][launchLatitude] = bombChar;
 		if(faction){
 			printMissile(americanBunkerNumber, lineAmericanBunker, columnAmericanBunker, launchLatitude, launchLongitude, americanMissileChar);
 		} else {
 			printMissile(sovietBunkerNumber, lineSovietBunker, columnSovietBunker, launchLatitude, launchLongitude, sovietMissileChar);
 		}
+		worldASCII[launchLongitude][launchLatitude] = bombChar;
+		printWorld();
 		
 		//verifico se qualcuno ha vinto o perso
 		if(sovietBunkerNumber == 0){
