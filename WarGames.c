@@ -241,6 +241,7 @@ void printMissile(int bunkerNumber, int lineBunker[], int columnBunker[], int la
 			conservChar = worldASCII[lineCounter][columnCounter + columnBunker[bunker]];
 			worldASCII[lineCounter][columnCounter + columnBunker[bunker]] = missileChar;
 			printWorld();
+			printf("UNITED-STATES: %d - SOVIET-UNION: %d\n", americanBunkerNumber, sovietBunkerNumber);
 			worldASCII[lineCounter][columnCounter + columnBunker[bunker]] = conservChar;
 			if(columnDifference < 0){
 				columnCounter--;
@@ -256,6 +257,7 @@ void printMissile(int bunkerNumber, int lineBunker[], int columnBunker[], int la
 			conservChar = worldASCII[lineCounter + lineBunker[bunker]][columnCounter];
 			worldASCII[lineCounter + lineBunker[bunker]][columnCounter] = missileChar;
 			printWorld();
+			printf("UNITED-STATES: %d - SOVIET-UNION: %d\n", americanBunkerNumber, sovietBunkerNumber);
 			worldASCII[lineCounter + lineBunker[bunker]][columnCounter] = conservChar;
 			if(lineDifference < 0){
 				lineCounter--;
